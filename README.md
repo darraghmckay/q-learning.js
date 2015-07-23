@@ -1,21 +1,21 @@
-q-learning.js
+qlearner.js
 =============
 
 Q-Learning Algorithm in JavaScript
 
 It's based on this tutorial: [A Painless Q-Learning Tutorial](http://mnemstudio.org/path-finding-q-learning-tutorial.htm).
 
-This belongs to a set of AI algorithms in JS to be used by [assemblino.js](https://github.com/nrox/assemblino.js).
+However this is a fork of the original Q-Learning Library written by [Nrox](https://github.com/nrox/q-learning.js).
 
-This algorithm is suitable to search, path finding, control, as it retains in memory an heuristics to achieve the goal, from
- any reachable discrete state.
+It now supports an alpha parameter and is based off the following equation
+[![Q-Learning Equations](https://upload.wikimedia.org/math/5/2/4/524fe99e01b50c2d0b3268cf418b6890.png)](#eqn)
 
 Demo
 -----
 
-[Example 1: basic](http://nrox.github.io/q-learning.js/test1.html)
+#[Example 1: basic](http://nrox.github.io/q-learning.js/test1.html)
 
-[Example 2: game agent](http://nrox.github.io/q-learning.js/test2.html)
+#[Example 2: game agent](http://nrox.github.io/q-learning.js/test2.html)
 
 
 Usage Example
@@ -24,9 +24,12 @@ Usage Example
 Learning
 ------
 
-The argument to the constructor is the gamma parameter. Default 0.5
+There are three arguments to the constructor
+    Gamma, alpha, actions
+    The default values for Gamma and Alpha are 0.8
+    Actions is an array of possible actions (more can be added dynamically too)
 
-    var learner = new QLearner(0.8);
+    var learner = new QLearner(0.2,0.4,[1,2,3,4,5]);
 
 
 Add transitions like this:
