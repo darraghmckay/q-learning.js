@@ -1,6 +1,6 @@
-qlearner.js
+q-learningr.js
 =============
-
+--------------
 Q-Learning Algorithm in JavaScript
 
 It's based on this tutorial: [A Painless Q-Learning Tutorial](http://mnemstudio.org/path-finding-q-learning-tutorial.htm).
@@ -10,12 +10,11 @@ However this is a fork of the original Q-Learning Library written by [Nrox](http
 It now supports an alpha parameter and is based off the following equation
 [![Q-Learning Equations](https://upload.wikimedia.org/math/5/2/4/524fe99e01b50c2d0b3268cf418b6890.png)](#eqn)
 
-Demo
------
+Demo (Coming Soon)
+========
+*
+*
 
-#[Example 1: basic](http://nrox.github.io/q-learning.js/test1.html)
-
-#[Example 2: game agent](http://nrox.github.io/q-learning.js/test2.html)
 
 
 Usage Example
@@ -81,5 +80,11 @@ or run it until it stays in the same state, or solution.
         current = learner.getState();
         learner.runOnce();
     }
+
+Output
+----
+To Output the Qvalues (State / Action Pairs) in JSON
+
+    JSON.stringify(learner.qvalues);
 
 
