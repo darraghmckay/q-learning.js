@@ -1,4 +1,4 @@
-q-learningr.js
+qlearner.js
 =============
 --------------
 Q-Learning Algorithm in JavaScript
