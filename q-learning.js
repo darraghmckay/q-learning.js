@@ -32,6 +32,9 @@ function QLearner(gamma,alpha, actions){
 
 
 QLearner.prototype.add = function (from, to, reward, actionName){
+
+
+
     if (!this.states[from]) this.addState(from);
     if (!this.states[to]) this.addState(to);
 
@@ -48,7 +51,7 @@ QLearner.prototype.add = function (from, to, reward, actionName){
     var qval = this.qvalues[from][actionName] || 0;
     
     var qv = ( qval + this.alpha * (  reward + this.gamma * (this.optimalFutureValue(to)) - qval));
-    //console.log( from  + " || " + to  + " |+| " + qval + " || " + reward + " || "  + this.optimalFutureValue(to) + " || " + qv );
+    //console.log( from  + " || " + to  + " |+| " + qval + " || " + reward + " || " + actionName + " || "  + this.optimalFutureValue(to) + " || " + qv );
     this.qvalues[from][actionName] = qv;
     this.states[from].addAction(to, reward, actionName,qv);
 };
@@ -60,14 +63,7 @@ QLearner.prototype.addState = function (name){
     return state;
 };
 
-QLearner.prototype.setState = function (name){
-    this.currentState = this.states[name];
-    return this.currentState;
-};
 
-QLearner.prototype.getState = function (){
-    return this.currentState && this.currentState.name;
-};
 
 QLearner.prototype.randomState = function(){
 
@@ -90,36 +86,10 @@ QLearner.prototype.optimalFutureValue = function(state){
         }
        i++;
    }
-
-  
-   
     return max ;
 };
 
-QLearner.prototype.step = function (){
-   this.currentState || (this.currentState = this.randomState());
-    var action = this.currentState.randomAction();
-    if (!action) return null;
-    this.rewards[this.currentState.name] || (this.rewards[this.currentState.name] = {});
 
-    //rewards array - filling it
-    this.rewards[this.currentState.name][action.name] = action.reward;
-
-
-
-    var rw = (action.reward || 0)
-     
-
-   this.qvalues[this.currentState.name] ||  (this.qvalues[this.currentState.name] = {});
-    var qval = (this.qvalues[this.currentState.name][action.name] || 0)
-    
-    var newQ =  ( qval + this.alpha * (  rw + this.gamma * (this.optimalFutureValue(action.nextState)) - qval));
-
-   this.qvalues[this.currentState.name][action.name] = newQ;
-   
-    return this.currentState = this.states[action.nextState];
-    
-};
 
 QLearner.prototype.printDump = function(){
     var dump = JSON.stringify(this.qvalues);
@@ -127,16 +97,6 @@ QLearner.prototype.printDump = function(){
     document.getElementById('log').value = dump;
   
 };
-
-QLearner.prototype.learn = function(steps){
-    steps = Math.max(1, steps || 0);
-    while (steps--){
-        this.currentState = this.randomState();
-        this.step();
-    }
-};
-
-
 
 
 QLearner.prototype.bestAction = function(state){
@@ -154,6 +114,7 @@ QLearner.prototype.bestAction = function(state){
             } else if (stateQvalues[action] > stateQvalues[bestAction]){
                 bestAction = action;
             }
+            //console.log("State: " + state + "QVAL: " + stateQvalues[action]);
         }
        
     }
@@ -165,19 +126,3 @@ QLearner.prototype.knowsAction = function(state, action){
     return (this.qvalues[state] || {}).hasOwnProperty(action);
 };
 
-QLearner.prototype.applyAction = function(actionName){
-    var actionObject = this.states[this.currentState.name].actions[actionName];
-    if (actionObject){
-        this.currentState = this.states[actionObject.nextState];
-    }
-    return actionObject && this.currentState;
-};
-
-QLearner.prototype.runOnce = function(state){
-    var best = this.bestAction(state);
-    var action = this.states[state].actions[best];
-    if (action){
-        this.currentState = this.states[action.nextState];
-    }
-    return action && this.currentState;
-};
