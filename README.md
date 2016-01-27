@@ -10,15 +10,18 @@ However this is a fork of the original Q-Learning Library written by [Nrox](http
 It now supports an alpha parameter and is based off the following equation
 [![Q-Learning Equations](https://upload.wikimedia.org/math/5/2/4/524fe99e01b50c2d0b3268cf418b6890.png)](#eqn)
 
-Demo (Coming Soon)
-========
-*
-*
+Demo 
+----------
 
+[Chrome's T-Rex Game (QLearning)](https://darraghmckay.github.io/Learning-TRex)
 
 
 Usage Example
-=======
+==============
+
+_____________________________
+
+
 
 Learning
 ------
@@ -38,53 +41,36 @@ Add transitions like this:
 In this last expression, if fromState or toState do not exist they are added automatically. If no reward is know pass
 *undefined*, if actionName is not important leave it undefined.
 
-If no reward is known and actionName is not important:
-
-    learner.add(fromState, toState);
-
-Reward is known and actionName is not important:
-
-    learner.add(fromState, toState, reward);
-
-Reward is not known and actionName is important
-
-    learner.add(fromState, toState, undefined, actionName);
-
-States and actions set, then make it learn. The argument is the number of iterations.
-
-    learner.learn(1000);
 
 Running
 -------
+Calculate the Best Action for a given state, based off it's Qvales
 
-To use what the learner *knows*. Set an initial state
+    var ba = learner.bestAction(state);
 
-    learner.setState('s0');
 
-then call to choose the best action and automatically apply it.
 
-    learner.runOnce();
+This is all you need to successfully set up a q-learning system. 
+It is a good idea to have it pick random Actions if a particular action isn't known for a given state, as follows:
 
-and get the next state with
-
-    var cur = learner.getState();
-
-or get the best action:
-
-    var ba = learner.bestAction();
-
-or run it until it stays in the same state, or solution.
-
-    var current = null;
-    while (current!==learner.getState()){
-        current = learner.getState();
-        learner.runOnce();
-    }
+    var random_action =      learner.actions[Math.floor(Math.random()*learner.actions.length)];
+    
+    //Pick the Best possible action (if there is any)
+    action = learner.bestAction(current_state);
+     
+    //Decide, based on exploration settings, whether to try the random one or use the known one
+    if (action===null || action === undefined || (!learner.knowsAction(current_state, random_action) && Math.random()< 0.2)){
+               action = random_action;
+     }
+     
+    //Set the Action
+    current_action = Number(action);
 
 Output
 ----
 To Output the Qvalues (State / Action Pairs) in JSON
 
     JSON.stringify(learner.qvalues);
+
 
 
